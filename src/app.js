@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const authRoute = require("./routes/auth-route");
 const adminRoute = require("./routes/admin-route");
 
+const authenticate = require("./middlewares/authenticate");
 const limiter = require("./middlewares/rate-limit");
 const error = require("./middlewares/error");
 const notFound = require("./middlewares/notFound");
@@ -17,9 +18,11 @@ app.use(limiter);
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
+app.use("/public", express.static("public"));
 
 app.use("/auth", authRoute);
-app.use("/admin",adminRoute);
+app.use("/admin", authenticate, adminRoute);
+
 app.use(notFound);
 app.use(error);
 
