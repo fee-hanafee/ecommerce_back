@@ -6,6 +6,8 @@ const morgan = require("morgan");
 
 const authRoute = require("./routes/auth-route");
 const adminRoute = require("./routes/admin-route");
+const userRoute = require("./routes/user-route");
+const publicRoute = require("./routes/public-route");
 
 const authenticate = require("./middlewares/authenticate");
 const limiter = require("./middlewares/rate-limit");
@@ -22,6 +24,8 @@ app.use("/public", express.static("public"));
 
 app.use("/auth", authRoute);
 app.use("/admin", authenticate, adminRoute);
+app.use("/user", authenticate, userRoute);
+app.use("/public", publicRoute);
 
 app.use(notFound);
 app.use(error);

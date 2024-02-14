@@ -34,3 +34,24 @@ exports.createProductImage = catchError(async (req, res, next) => {
 
   res.status(201).json({ product });
 });
+
+exports.updateBrand = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+
+  const brand = await productService.updateBrand(req.body);
+
+  res.status(200).json({ brand });
+});
+
+exports.updataProduct = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+  const id = req.body.id;
+  delete req.body.id;
+  const product = await productService.updateProduct(req.body,id)
+  res.status(200).json({ product, id });
+});
+
+exports.updateImage = catchError(async (req,res,next)=> {
+  checkAdmin(req.user.role)
+  
+})
