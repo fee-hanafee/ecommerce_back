@@ -47,11 +47,44 @@ exports.updataProduct = catchError(async (req, res, next) => {
   checkAdmin(req.user.role);
   const id = req.body.id;
   delete req.body.id;
-  const product = await productService.updateProduct(req.body,id)
+  const product = await productService.updateProduct(req.body, id);
   res.status(200).json({ product, id });
 });
 
-exports.updateImage = catchError(async (req,res,next)=> {
-  checkAdmin(req.user.role)
-  
-})
+exports.updateImage = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+});
+
+exports.getAllOrder = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+
+  const order = await productService.getAllOrder();
+
+  res.status(200).json({ order });
+});
+
+exports.deleteProduct = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+  await productService.deleteImage(req.body.imageId);
+  await productService.deleteProduct(req.body.productId);
+
+  res.status(200).json({ message: "delete success" });
+});
+
+exports.updateOrder = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+  const id = req.body.id;
+  delete req.body.id;
+
+  const update = await productService.updateOrder(req.body, id);
+
+  res.status(200).json({ update });
+});
+exports.updateOrderItem = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+  const id = req.body.id;
+  delete req.body.id;
+  const update = await productService.updateOrderItem(req.body, id);
+
+  res.status(200).json({ update });
+});

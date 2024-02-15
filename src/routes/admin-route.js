@@ -13,8 +13,14 @@ router.post(
   upload.single("image"),
   productController.createProductImage
 );
+router.get('/order',productController.getAllOrder)
+
+router.delete("/product",productController.deleteProduct)
+
 
 // update
+router.patch("/order",productController.updateOrder)
+router.patch('/orderItem',productController.updateOrderItem)
 router.patch("/product/brand", productController.updateBrand);
 router.patch("/product", productController.updataProduct);
 // router.patch("/image")
