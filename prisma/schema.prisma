@@ -44,15 +44,15 @@ model cart {
 }
 
 model order {
-  id         Int      @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   adress     String
-  totalPrice Decimal  @map("total_price") @db.Decimal(10, 2)
-  
-  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  totalPrice Decimal @map("total_price") @db.Decimal(10, 2)
 
-  user      user?        @relation(fields: [userId], references: [id])
-  userId    Int?         @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  user      user?       @relation(fields: [userId], references: [id])
+  userId    Int?        @map("user_id")
   orderItem orderItem[]
 
   @@map("orders")
@@ -73,6 +73,13 @@ model orderItem {
   @@map("order_items")
 }
 
+model type {
+  id   Int    @id @default(autoincrement())
+  type String
+
+  product product[]
+}
+
 model product {
   id        Int      @id @default(autoincrement())
   name      String
@@ -80,14 +87,15 @@ model product {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
 
-  monitor String? @db.VarChar(10)
-  color   String? @db.VarChar(20)
-
+  monitor   String?     @db.VarChar(10)
+  color     String?     @db.VarChar(20)
+  type      type        @relation(fields: [typeId], references: [id])
   brandId   Int
   brand     brand       @relation(fields: [brandId], references: [id])
   orderItem orderItem[]
   cart      cart[]
   image     image[]
+  typeId    Int
 
   @@map("products")
 }

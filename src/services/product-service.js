@@ -15,6 +15,8 @@ exports.createImage = (product) =>
 exports.updateBrand = (data) =>
   prisma.brand.update({ data: { name: data.name }, where: { id: +data.id } });
 
+exports.createType = (type) => prisma.type.create({ data: { type } });
+
 exports.updateProduct = (data, id) =>
   prisma.product.update({
     data: { ...data },

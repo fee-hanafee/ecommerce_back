@@ -8,6 +8,14 @@ function checkAdmin(role) {
   if (role != "ADMIN") createError("unauthorized", 400);
 }
 
+exports.createType = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+
+  const type = await productService.createType(req.body.type);
+
+  res.status(201).json({ message: type });
+});
+
 exports.createBrand = catchError(async (req, res, next) => {
   checkAdmin(req.user.role);
 
