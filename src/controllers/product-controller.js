@@ -8,6 +8,8 @@ function checkAdmin(role) {
   if (role != "ADMIN") createError("unauthorized", 400);
 }
 
+
+
 exports.createType = catchError(async (req, res, next) => {
   checkAdmin(req.user.role);
 

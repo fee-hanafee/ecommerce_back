@@ -7,7 +7,26 @@ exports.findUserByEmailOrMobile = (emailOrMobile) =>
     },
   });
 
+exports.createCart = (data) => prisma.cart.create({ data });
+
+exports.deleteItemCart = (id) => prisma.cart.delete({ where: { id } });
+
+exports.updateCart = (id) =>
+  prisma.cart.update({
+    data: { amount: { increment: 1 } },
+    where: { id },
+  });
+
+exports.findProductByuserId = (userId) =>
+  prisma.cart.findMany({ where: { userId }, include: { product: true } });
+
 exports.createUser = (data) => prisma.user.create({ data });
+
+exports.getCart = (userId) =>
+  prisma.cart.findMany({
+    where: { userId },
+    include: { product: { include: { image: true } } },
+  });
 
 exports.findUserById = (id) =>
   prisma.user.findUnique({
@@ -18,7 +37,7 @@ exports.updateUserById = (data, id) =>
   prisma.user.update({ data, where: { id } });
 
 exports.createOrder = (data) => prisma.order.create({ data });
-exports.createOrderItem = (data) => prisma.orderItem.create({ data });
+exports.createOrderItem = (data) => prisma.orderItem.createMany({ data });
 
 exports.deleteOrder = (id) => prisma.order.delete({ where: { id } });
 

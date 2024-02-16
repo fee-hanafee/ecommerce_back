@@ -41,6 +41,7 @@ model cart {
 
   product   product @relation(fields: [productId], references: [id])
   productId Int     @map("product_id")
+  amount    Int     @default(1)
 }
 
 model order {

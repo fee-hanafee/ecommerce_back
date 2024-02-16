@@ -3,26 +3,72 @@ const createError = require("../utils/create-error");
 
 const userService = require("../services/user-service");
 
+exports.createCart = catchError(async (req, res, next) => {
+  const cart = await userService.findProductByuserId(req.user.id);
+
+  const productIdCart = cart.map((el) => {
+    return el.productId;
+  });
+
+  if (productIdCart.includes(req.body.productId)) {
+    let ID = undefined;
+    cart.map((el) => {
+      if (el.productId == req.body.productId) {
+        ID = el.id;
+      }
+    });
+    const item = await userService.updateCart(ID);
+    return res.status(201).json({ item });
+  }
+
+  const data = {};
+  data.userId = req.user.id;
+  data.productId = req.body.productId;
+  const item = await userService.createCart(data);
+   
+  res.status(201).json({ item });
+});
+
 exports.createOrder = catchError(async (req, res, next) => {
   const data = {};
-  data.productId = req.body.productId;
-  data.amount = req.body.amount;
-  delete req.body.amount;
-  delete req.body.productId;
 
-  req.body.userId = req.user.id;
+  const item = await userService.findProductByuserId(req.user.id);
 
-  const order = await userService.createOrder(req.body);
+  const totalPrice = item.reduce((acc, el) => {
+    acc += +el.product.price;
+    return acc;
+  }, 0);
 
-  data.orderId = order.id;
+  data.totalPrice = totalPrice;
+  data.userId = req.user.id;
+  data.adress = req.body.adress;
 
-  console.log(data);
-  const orderItem = await userService.createOrderItem(data);
+  const order = await userService.createOrder(data);
 
-  console.log(orderItem);
+  const dataItem = item.map((el) => ({
+    orderId: order.id,
+    amount: el.amount,
+    productId: el.productId,
+  }));
 
-  res.status(201).json({ order, orderItem });
+  const orderItem = await userService.createOrderItem(dataItem);
+  res.status(201).json({ orderItem });
 });
+
+exports.getCart = catchError(async (req, res, next) => {
+  const item = await userService.getCart(req.user.id);
+
+  res.status(200).json({ item });
+});
+
+
+exports.deleteItemCart = catchError(async (req,res,next)=> {
+  await userService.deleteItemCart(+req.params.id)
+
+
+  res.status(200).json({message: "delete success"})
+}) 
+
 exports.updateProfile = catchError(async (req, res, next) => {});
 
 exports.deleteOrder = catchError(async (req, res, next) => {
