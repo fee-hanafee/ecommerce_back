@@ -4,6 +4,8 @@ const router = express.Router();
 
 router.post("/cart", userController.createCart);
 router.post("/order", userController.createOrder);
+
+router.patch("/cart",userController.updateItemCart)
 router.patch("/profile", userController.updateProfile);
 router.patch("/order", userController.updateOrder);
 router.patch("/orderItem", userController.updateOrderItem);

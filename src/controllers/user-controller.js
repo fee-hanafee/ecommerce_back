@@ -25,7 +25,7 @@ exports.createCart = catchError(async (req, res, next) => {
   data.userId = req.user.id;
   data.productId = req.body.productId;
   const item = await userService.createCart(data);
-   
+
   res.status(201).json({ item });
 });
 
@@ -35,7 +35,7 @@ exports.createOrder = catchError(async (req, res, next) => {
   const item = await userService.findProductByuserId(req.user.id);
 
   const totalPrice = item.reduce((acc, el) => {
-    acc += +el.product.price;
+    acc += +el.product.price * el.amount;
     return acc;
   }, 0);
 
@@ -52,6 +52,8 @@ exports.createOrder = catchError(async (req, res, next) => {
   }));
 
   const orderItem = await userService.createOrderItem(dataItem);
+
+  const updateStatus = await userService.updateStatusCart(data.userId);
   res.status(201).json({ orderItem });
 });
 
@@ -61,13 +63,22 @@ exports.getCart = catchError(async (req, res, next) => {
   res.status(200).json({ item });
 });
 
+exports.updateItemCart = catchError(async (req, res, next) => {
+  const id = req.body.id;
+  delete req.body.id;
 
-exports.deleteItemCart = catchError(async (req,res,next)=> {
-  await userService.deleteItemCart(+req.params.id)
+  console.log(id);
+  console.log(req.body);
+  const item = await userService.updateItemCart(id, req.body);
 
+  res.status(200).json({ item });
+});
 
-  res.status(200).json({message: "delete success"})
-}) 
+exports.deleteItemCart = catchError(async (req, res, next) => {
+  await userService.deleteItemCart(+req.params.id);
+
+  res.status(200).json({ message: "delete success" });
+});
 
 exports.updateProfile = catchError(async (req, res, next) => {});
 

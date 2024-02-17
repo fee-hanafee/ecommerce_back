@@ -17,6 +17,12 @@ exports.updateCart = (id) =>
     where: { id },
   });
 
+exports.updateItemCart = (id, data) =>
+  prisma.cart.update({
+    data,
+    where: { id },
+  });
+
 exports.findProductByuserId = (userId) =>
   prisma.cart.findMany({ where: { userId }, include: { product: true } });
 
@@ -58,3 +64,6 @@ exports.updateOrder = (data, id) =>
 
 exports.updateOrderItem = (data, id) =>
   prisma.orderItem.update({ data, where: { id } });
+
+exports.updateStatusCart = (userId) =>
+  prisma.cart.deleteMany({where: { userId } });
