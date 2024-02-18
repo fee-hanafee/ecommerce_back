@@ -8,8 +8,6 @@ function checkAdmin(role) {
   if (role != "ADMIN") createError("unauthorized", 400);
 }
 
-
-
 exports.createType = catchError(async (req, res, next) => {
   checkAdmin(req.user.role);
 
@@ -97,4 +95,16 @@ exports.updateOrderItem = catchError(async (req, res, next) => {
   const update = await productService.updateOrderItem(req.body, id);
 
   res.status(200).json({ update });
+});
+
+exports.getCustomer = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+
+  const data = await productService.getAllCustomer();
+  const customer = data.map((el) => {
+    delete el.password
+    return el
+  })
+
+  res.status(200).json({ customer });
 });

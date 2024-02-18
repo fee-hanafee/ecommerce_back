@@ -29,6 +29,7 @@ exports.updateProduct = (data, id) =>
 exports.getAllOrder = () =>
   prisma.order.findMany({ include: { orderItem: true } });
 
+  exports.getAllCustomer = () => prisma.user.findMany()
 exports.deleteProduct = (id) => prisma.product.delete({ where: { id } });
 exports.deleteImage = (id) => prisma.image.deleteMany({ where: { id } });
 

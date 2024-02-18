@@ -14,7 +14,7 @@ router.post(
   productController.createProductImage
 );
 router.get("/order", productController.getAllOrder);
-
+router.get("/customer",productController.getCustomer)
 router.delete("/product", productController.deleteProduct);
 
 // update
