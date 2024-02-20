@@ -22,6 +22,7 @@ router.patch("/order", productController.updateOrder);
 router.patch("/orderItem", productController.updateOrderItem);
 router.patch("/product/brand", productController.updateBrand);
 router.patch("/product", productController.updataProduct);
+router.patch("/product/image",upload.single("image"),productController.updateImage)
 // router.patch("/image")
 
 module.exports = router;

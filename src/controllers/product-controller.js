@@ -61,6 +61,13 @@ exports.updataProduct = catchError(async (req, res, next) => {
 
 exports.updateImage = catchError(async (req, res, next) => {
   checkAdmin(req.user.role);
+  const data = {};
+  data.image = await uploadService.upload(req.file.path);
+  console.log(req.file.path);
+
+  const update = await productService.updateImage(data.image, +req.body.id);
+
+  res.status(200).json({ update });
 });
 
 exports.getAllOrder = catchError(async (req, res, next) => {
@@ -102,9 +109,9 @@ exports.getCustomer = catchError(async (req, res, next) => {
 
   const data = await productService.getAllCustomer();
   const customer = data.map((el) => {
-    delete el.password
-    return el
-  })
+    delete el.password;
+    return el;
+  });
 
   res.status(200).json({ customer });
 });
