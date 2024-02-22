@@ -3,7 +3,12 @@ const createError = require("../utils/create-error");
 
 const userService = require("../services/user-service");
 const uploadService = require("../services/upload-service");
+
+function checkUSer (role) {
+  if (role != "USER") createError("unauthorized", 403);
+}
 exports.createCart = catchError(async (req, res, next) => {
+  checkUSer(req.user.role)
   const cart = await userService.findProductByuserId(req.user.id);
 
   const productIdCart = cart.map((el) => {
@@ -30,6 +35,7 @@ exports.createCart = catchError(async (req, res, next) => {
 });
 
 exports.createOrder = catchError(async (req, res, next) => {
+  checkUSer(req.user.role)
   const data = {};
 
   const item = await userService.findProductByuserId(req.user.id);
@@ -61,12 +67,14 @@ exports.createOrder = catchError(async (req, res, next) => {
 });
 
 exports.getCart = catchError(async (req, res, next) => {
+  checkUSer(req.user.role)
   const item = await userService.getCart(req.user.id);
 
   res.status(200).json({ item });
 });
 
 exports.updateItemCart = catchError(async (req, res, next) => {
+  checkUSer(req.user.role)
   const id = req.body.id;
   delete req.body.id;
 
