@@ -16,7 +16,6 @@ router.post(
 router.get("/order", productController.getAllOrder);
 router.get("/customer",productController.getCustomer)
 router.delete("/product/:id", productController.deleteProduct);
-
 // update
 router.patch("/order", productController.updateOrder);
 router.patch("/orderItem", productController.updateOrderItem);
@@ -24,5 +23,6 @@ router.patch("/product/brand", productController.updateBrand);
 router.patch("/product", productController.updataProduct);
 router.patch("/product/image",upload.single("image"),productController.updateImage)
 // router.patch("/image")
+router.delete("/order/:id",productController.deleteOrder)
 
 module.exports = router;

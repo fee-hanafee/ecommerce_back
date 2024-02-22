@@ -56,7 +56,7 @@ exports.deleteOneOrderItem = (id) =>
 exports.findOrder = (id) =>
   prisma.order.findMany({
     where: { userId: id },
-    include: { orderItem: true },
+    include: { orderItem: { include: { product: true } } },
   });
 
 exports.updateOrder = (data, id) =>
@@ -66,4 +66,4 @@ exports.updateOrderItem = (data, id) =>
   prisma.orderItem.update({ data, where: { id } });
 
 exports.updateStatusCart = (userId) =>
-  prisma.cart.deleteMany({where: { userId } });
+  prisma.cart.deleteMany({ where: { userId } });

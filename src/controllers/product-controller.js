@@ -5,7 +5,7 @@ const productService = require("../services/product-service");
 const uploadService = require("../services/upload-service");
 
 function checkAdmin(role) {
-  if (role != "ADMIN") createError("unauthorized", 400);
+  if (role != "ADMIN") createError("unauthorized", 403);
 }
 
 exports.createType = catchError(async (req, res, next) => {
@@ -114,4 +114,12 @@ exports.getCustomer = catchError(async (req, res, next) => {
   });
 
   res.status(200).json({ customer });
+});
+
+exports.deleteOrder = catchError(async (req, res, next) => {
+  checkAdmin(req.user.role);
+  await productService.deleteOrderItem(+req.params.id);
+  await productService.deleteOrder(+req.params.id);
+
+  res.status(200).json({ message: "delete success" });
 });

@@ -24,16 +24,22 @@ exports.updateProduct = (data, id) =>
   });
 
 exports.updateImage = (image, id) =>
-  prisma.image.updateMany({ where: { id }, data: { image } });
+  prisma.image.updateMany({ where: { productId: id }, data: { image } });
 
 exports.getAllOrder = () =>
   prisma.order.findMany({ include: { orderItem: true } });
 
 exports.getAllCustomer = () => prisma.user.findMany();
 exports.deleteProduct = (id) => prisma.product.delete({ where: { id } });
-exports.deleteImage = (id) => prisma.image.deleteMany({ where: { productId: id } });
+exports.deleteImage = (productId) =>
+  prisma.image.deleteMany({ where: { productId } });
 
 exports.updateOrder = (data, id) =>
   prisma.order.update({ data, where: { id } });
 exports.updateOrderItem = (data, id) =>
   prisma.orderItem.update({ data, where: { id } });
+
+exports.deleteOrder = (id) => prisma.order.delete({ where: { id } });
+
+exports.deleteOrderItem = (orderId) =>
+  prisma.orderItem.deleteMany({ where: { orderId } });

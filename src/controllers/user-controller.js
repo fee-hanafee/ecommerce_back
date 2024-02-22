@@ -2,7 +2,7 @@ const catchError = require("../utils/catch-error");
 const createError = require("../utils/create-error");
 
 const userService = require("../services/user-service");
-
+const uploadService = require("../services/upload-service");
 exports.createCart = catchError(async (req, res, next) => {
   const cart = await userService.findProductByuserId(req.user.id);
 
@@ -11,7 +11,7 @@ exports.createCart = catchError(async (req, res, next) => {
   });
 
   if (productIdCart.includes(req.body.productId)) {
-    let ID = undefined;
+    let ID 
     cart.map((el) => {
       if (el.productId == req.body.productId) {
         ID = el.id;
@@ -42,7 +42,10 @@ exports.createOrder = catchError(async (req, res, next) => {
   data.totalPrice = totalPrice;
   data.userId = req.user.id;
   data.adress = req.body.adress;
+  data.image = await uploadService.upload(req.file.path);
 
+  console.log(req.file);
+  console.log(req.body);
   const order = await userService.createOrder(data);
 
   const dataItem = item.map((el) => ({
@@ -108,7 +111,11 @@ exports.getOrder = catchError(async (req, res, next) => {
 });
 
 exports.updateOrder = catchError(async (req, res, next) => {
-  if (req.user.id != req.body.id) createError("unauthorized", 400);
+  const check = await userService.findOrder(req.user.id);
+  console.log(req.body);
+  const arr = check.map((el) => el.id);
+
+  if (!arr.includes(req.body.id)) createError("unauthorized", 400);
 
   const id = req.body.id;
   delete req.body.id;
