@@ -94,6 +94,7 @@ model product {
   color     String?     @db.VarChar(20)
   type      type        @relation(fields: [typeId], references: [id])
   brandId   Int
+  isDeleted Boolean     @default(false) @map("is_deleted")
   brand     brand       @relation(fields: [brandId], references: [id])
   orderItem orderItem[]
   cart      cart[]

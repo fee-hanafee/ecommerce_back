@@ -80,7 +80,7 @@ exports.getAllOrder = catchError(async (req, res, next) => {
 
 exports.deleteProduct = catchError(async (req, res, next) => {
   checkAdmin(req.user.role);
-  await productService.deleteImage(+req.params.id);
+  // await productService.deleteImage(+req.params.id);
   await productService.deleteProduct(+req.params.id);
 
   res.status(200).json({ message: "delete success" });
